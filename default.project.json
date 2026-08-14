@@ -1,0 +1,8 @@
+{
+  "name": "LiveOpsAutopilot",
+  "tree": {
+    "$className": "Folder",
+    "Main": {"$path": "src/Main.server.luau"},
+    "Modules": {"$path": "src/Modules"}
+  }
+}
