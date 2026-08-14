@@ -1,0 +1,27 @@
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Rojo
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/rojo.zip https://github.com/rojo-rbx/rojo/releases/download/v7.6.1/rojo-7.6.1-linux-x86_64.zip
+          mkdir -p "$HOME/.local/bin"
+          unzip -q -o /tmp/rojo.zip -d "$HOME/.local/bin"
+          chmod +x "$HOME/.local/bin/rojo"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - run: python scripts/static_check.py
+      - run: rojo build default.project.json -o LiveOpsAutopilot.rbxm
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LiveOps-Autopilot-plugin
+          path: LiveOpsAutopilot.rbxm
+          if-no-files-found: error
